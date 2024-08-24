@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type BikesFaq {
+  a String
+  q String
+}
+
+model bikes {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  description   String
+  discount      Int
+  faq           BikesFaq[]
+  image         String
+  images        String[]
+  name          String
+  originalPrice Int
+  price         Int
+  rating        Int
+  url           String
+}
+
+model users {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  email String @unique
+  name  String?
+  phone String?
+  city  String?
+  state String?
+  zip   String?
+  address  String?
+  otp   String?
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model rando {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  randomNum Int
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}

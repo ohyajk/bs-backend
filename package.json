@@ -1,0 +1,20 @@
+{
+  "name": "bs-backend",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "hono": "^4.5.6",
+    "hono-session": "^1.0.4",
+    "hono-sessions": "^0.5.8",
+    "otpauth": "^9.3.2",
+    "prisma": "^5.18.0",
+    "sparkpost": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/otp-generator": "^4.0.2",
+    "@types/sparkpost": "^2.1.8"
+  }
+}
