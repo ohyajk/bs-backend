@@ -17,5 +17,8 @@
     "@types/bun": "latest",
     "@types/otp-generator": "^4.0.2",
     "@types/sparkpost": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
