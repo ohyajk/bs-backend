@@ -3,9 +3,10 @@ import prisma from '../lib/prismaClient';
 import {  decode } from 'hono/jwt';
 import {getCookie } from 'hono/cookie'
 
-const user = new Hono();
+const order = new Hono();
 
-user.get('/', async (c) => {
+order.post('/', async (c) => {
+    const { bikesId } = await c.req.json();
     const token = getCookie(c, 'session');
   if (!token) {
     return c.json({ error: 'Authorization token missing' }, 401);
@@ -15,27 +16,29 @@ user.get('/', async (c) => {
     if (!decodEmail) {
         return c.json({ error: 'Invalid token' }, 401);
     }
-
-  try {
     const userData = await prisma.user.findFirst({
         where: { email: decodEmail.payload?.email as string },
-        select:{
-            email:true,
-            otp:false,
-            id: true,
-            name: true,
-            phone: true,
-            city: true,
-            state: true,
-            zip: true,
-            address: true,
-            orders: true,
-        }
     });
-    return c.json(userData);
+
+    if (!userData) {
+        return c.json({ error: 'User not found' }, 404);
+    }
+
+  try {
+
+    const saveOrder = await prisma.order.create({
+        data:{
+            userId: userData.id,
+            bikesId,
+            quantity: 1,
+            total: 1,
+            status: 'pending'
+        }
+    })
+    return c.json(saveOrder);
   } catch (err) {
     return c.json({ error: 'Failed to fetch user' }, 500);
   }
 });
 
-export default user;
+export default order;

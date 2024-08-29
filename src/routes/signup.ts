@@ -22,7 +22,7 @@ signup.post('/', async (c) => {
 
 
   try {
-     await prisma.users.create({
+     await prisma.user.create({
       data: {
         email,
         otp: token

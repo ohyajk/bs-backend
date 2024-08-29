@@ -5,7 +5,7 @@ const  bikes = new Hono()
 
 bikes.get('/all', async (c) => {
   try {
-    const bikeData = await prisma.bikes.findMany();
+    const bikeData = await prisma.bike.findMany();
     return c.json(bikeData);
   } catch (err) {
     return c.json({ error: 'Failed to fetch bikes' }, 500);
@@ -15,7 +15,7 @@ bikes.get('/all', async (c) => {
 bikes.get('/:url', async (c) => {
   const {url}  = c.req.param()
   try {
-    const bikeData = await prisma.bikes.findFirst({
+    const bikeData = await prisma.bike.findFirst({
       where: {
         url
       },

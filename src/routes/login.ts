@@ -10,7 +10,7 @@ login.post('/', async (c) => {
   const { email, otp } = await c.req.json();
 
   try {
-    const user = await prisma.users.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email },
     });
 
@@ -28,7 +28,7 @@ login.post('/', async (c) => {
     //   });
 
     const token = await sign({ email }, 'secret');
-    setCookie(c, 'session', token, { httpOnly: true, maxAge: 6000 });
+    setCookie(c, 'session', token, { httpOnly: true, maxAge: 60 });
   
     return c.json({ message: 'Login successful!', token });
   } catch (error) {

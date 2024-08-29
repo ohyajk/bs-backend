@@ -5,16 +5,18 @@
     "start": "bun run src/index.ts"
   },
   "dependencies": {
+    "@hono/node-server": "^1.12.1",
     "@prisma/client": "^5.18.0",
     "hono": "^4.5.6",
-    "hono-session": "^1.0.4",
-    "hono-sessions": "^0.5.8",
+    "mailersend": "^2.2.0",
+    "mailgun.js": "^10.2.3",
+    "nodemailer": "^6.9.14",
     "otpauth": "^9.3.2",
-    "prisma": "^5.18.0",
-    "sparkpost": "^2.1.4"
+    "prisma": "^5.18.0"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/nodemailer": "^6.4.15",
     "@types/otp-generator": "^4.0.2",
     "@types/sparkpost": "^2.1.8"
   },
