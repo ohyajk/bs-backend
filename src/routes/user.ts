@@ -1,41 +1,31 @@
-import { Hono } from 'hono';
-import prisma from '../lib/prismaClient';
-import {  decode } from 'hono/jwt';
-import {getCookie } from 'hono/cookie'
+import { Hono } from "hono"
+import prisma from "../lib/prismaClient"
+import authorize, { CustomContext } from "../lib/authorize"
 
-const user = new Hono();
+const user = new Hono()
 
-user.get('/', async (c) => {
-    const token = getCookie(c, 'session');
-  if (!token) {
-    return c.json({ error: 'Authorization token missing' }, 401);
-  }
+user.get("/", authorize, async (c: CustomContext) => {
+    const decodEmail = c.get("decodEmail")
 
-  const decodEmail = decode(token);
-    if (!decodEmail) {
-        return c.json({ error: 'Invalid token' }, 401);
+    try {
+        const userData = await prisma.user.findFirst({
+            where: { email: decodEmail.payload?.email as string },
+            select: {
+                otp: false,
+                email: true,
+                id: true,
+                name: true,
+                phone: true,
+                isOnboardingComplete: true,
+                createdAt: true,
+                updatedAt: true,
+            },
+        })
+        return c.json(userData)
+    } catch (err) {
+        console.log(err)
+        return c.json({ error: "Failed to fetch user", err }, 500)
     }
+})
 
-  try {
-    const userData = await prisma.user.findFirst({
-        where: { email: decodEmail.payload?.email as string },
-        select:{
-            email:true,
-            otp:false,
-            id: true,
-            name: true,
-            phone: true,
-            city: true,
-            state: true,
-            zip: true,
-            address: true,
-            orders: true,
-        }
-    });
-    return c.json(userData);
-  } catch (err) {
-    return c.json({ error: 'Failed to fetch user' }, 500);
-  }
-});
-
-export default user;
+export default user

@@ -16,8 +16,8 @@ type BikesFaq {
 model Rando {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   randomNum Int
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt @default(now())
+  createdAt DateTime? @default(now())
 }
 model Bike {
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -31,31 +31,50 @@ model Bike {
   price         Int
   rating        Int
   url           String
+  order          Order?
+  updatedAt DateTime? @updatedAt @default(now())
+  createdAt DateTime? @default(now())
 }
 
 model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   email String @unique
-  name  String?
-  phone String?
-  city  String?
-  state String?
-  zip   String?
-  address  String?
+  name  String? @default("user")
+  phone String? @unique @default("1234567890")
+  locality String?
+  city    String?
+  state   String?
+  country String?
+  zip     String?
   otp   String?
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-  orders    Order[]  
+  isOnboardingComplete Boolean?  @default(false)
+  orders Order[]
+  updatedAt DateTime? @updatedAt @default(now())
+  createdAt DateTime? @default(now())
+}
+
+enum DeliveryStatus {
+  DELIVERED
+  IN_TRANSIT
+  UNDELIVERED
+  SHIPPED
+  CANCELLED
+  YET_TO_SHIP
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
 }
 
 model Order {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   userId    String     @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id])
-  bikesId   String[]   @db.ObjectId
-  quantity  Int
-  total     Int
-  status    String
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  bikeId   String   @unique @db.ObjectId
+  paymentStatus     PaymentStatus
+  deliveryStatus    DeliveryStatus
+  updatedAt DateTime? @updatedAt @default(now())
+  createdAt DateTime? @default(now())
+  user User @relation(fields: [userId], references: [id])
+  bike   Bike   @relation(fields: [bikeId], references: [id])
 }
