@@ -1,23 +1,23 @@
-
-
-import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
-
-
-const mailerSend = new MailerSend({
-    apiKey: Bun.env.MAILERSEND_API_KEY || '',
-});
+import * as nodemailer from "nodemailer"
 
 export const sendMail = async (email: string, otp: string) => {
-  
-  
-  const sender = new Sender('oa@trial-z86org861814ew13.mlsender.net', 'Oluwaseun Akinola');
-  const reciepient = [new Recipient(email, 'Recipient')]
-  const emailParams = new EmailParams()
-      .setFrom(sender)
-      .setTo(reciepient)
-      .setSubject("Subject")
-      .setHtml(
-        `
+    let transporter = nodemailer.createTransport({
+        host: "smtp.sparkpostmail.com", // Replace with your SMTP server
+        port: 587, // Common port for SMTP
+        secure: false, // Use true for port 465, false for others
+        authMethod: "LOGIN",
+        auth: {
+            user: "SMTP_Injection", // Replace with your SMTP email
+            pass: Bun.env.SP_API_KEY, // Replace with your SMTP password
+        },
+    })
+
+    // Set email data
+    let mailOptions = {
+        from: '"Bikestore" <sender@mail.jkweb.in>', // Sender's name and email
+        to: email, // List of recipients
+        subject: "Bikestore OTP Verification", // Subject line
+        html: `
 <!DOCTYPE html>
 <html lang="und" dir="auto" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -265,14 +265,14 @@ OTP for email confirmation
 </div>
 </body>
 </html>
-`
-      )
-      .setText("Greetings from the team, you got this message through MailerSend.");
-      mailerSend.email
-      .send(emailParams)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-};
+`, // HTML body
+    }
 
-
-
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log("Error occurred:", error)
+        }
+        console.log("Message sent: %s", info.messageId)
+    })
+}
