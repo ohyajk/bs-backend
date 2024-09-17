@@ -7,8 +7,8 @@ import user from "./routes/user"
 import rando from "./routes/rando"
 import { cors } from "hono/cors"
 import order from "./routes/order"
-const app = new Hono().basePath("/api")
-
+const app = new Hono()
+// .basePath("/api")
 app.get("/", (c) => {
     return c.text("Hello Hono!")
 })
@@ -23,8 +23,8 @@ app.use(
     } as any)
 )
 
-app.get("/", (c) => {
-    return c.text("Hello Hono!")
+app.get("/loaderio-c711c4a1035c18ccfd35f348cbba7d74", (c) => {
+    return c.html("loaderio-c711c4a1035c18ccfd35f348cbba7d74")
 })
 
 app.route("/bike", bikes)
