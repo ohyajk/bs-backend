@@ -7,8 +7,11 @@ import user from "./routes/user"
 import rando from "./routes/rando"
 import { cors } from "hono/cors"
 import order from "./routes/order"
+const app = new Hono().basePath("/api")
 
-const app = new Hono<{ Variables: { session: string } }>().basePath("/api")
+app.get("/", (c) => {
+    return c.text("Hello Hono!")
+})
 
 app.use(
     "*",
@@ -31,6 +34,10 @@ app.route("/user", user)
 app.route("/rando", rando)
 app.route("/order", order)
 
-serve(app, (info) => {
-    console.log(`Listening on http://localhost:${info.port}/api`)
+const port = 3001
+console.log(`Server is running on port ${port}`)
+
+serve({
+    fetch: app.fetch,
+    port,
 })
