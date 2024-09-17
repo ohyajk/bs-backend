@@ -20,6 +20,25 @@ signup.post("/", async (c) => {
     console.log(email)
     let token = totp.generate()
 
+    const userExist = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+    })
+
+    if (userExist) {
+        await prisma.user.update({
+            where: {
+                email,
+            },
+            data: {
+                otp: token,
+            },
+        })
+        sendMail(email, token)
+        return c.json({ message: "Logging In, OTP Sent!" }, 200)
+    }
+
     try {
         await prisma.user.create({
             data: {
@@ -32,8 +51,6 @@ signup.post("/", async (c) => {
 
         return c.json({ message: "Signup successful! OTP sent to email." }, 201)
     } catch (error) {
-        if ((error as any).code === "P2002")
-            return c.json({ error: "Email already exists!" }, 400)
         return c.json({ error: "Signup failed!", err: error }, 500)
     }
 })
