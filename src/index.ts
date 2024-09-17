@@ -23,7 +23,7 @@ app.use(
     } as any)
 )
 
-app.get("/loaderio-c711c4a1035c18ccfd35f348cbba7d74", (c) => {
+app.get("/loaderio-c711c4a1035c18ccfd35f348cbba7d74/", (c) => {
     return c.html("loaderio-c711c4a1035c18ccfd35f348cbba7d74")
 })
 
