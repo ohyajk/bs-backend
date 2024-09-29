@@ -34,7 +34,7 @@ app.route("/user", user)
 app.route("/rando", rando)
 app.route("/order", order)
 
-const port = 3000
+const port = 9000
 console.log(`Server is running on port ${port}`)
 
 serve({
