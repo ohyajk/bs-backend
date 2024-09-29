@@ -25,4 +25,5 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npx prisma db push
+    - run: pm2 restart 0
     
