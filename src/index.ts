@@ -7,6 +7,9 @@ import user from "./routes/user"
 import rando from "./routes/rando"
 import { cors } from "hono/cors"
 import order from "./routes/order"
+
+require('dotenv').config()
+
 const app = new Hono().basePath("/api")
 
 app.get("/", (c) => {
