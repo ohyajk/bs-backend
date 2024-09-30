@@ -36,6 +36,7 @@ app.route("/order", order)
 
 const port = 9000
 console.log(`Server is running on port ${port}`)
+console.log(process.env.DATABASE_URL, 'db url')
 
 serve({
     fetch: app.fetch,
