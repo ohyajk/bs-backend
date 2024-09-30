@@ -30,6 +30,13 @@ jobs:
           SEC_KEY: ${{ secrets.SEC_KEY }}
         run: npx prisma db push
 
+      - name: Create Env file
+        run: |
+          touch .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
+          echo "SP_API_KEY=${{ secrets.SP_API_KEY }}" >> .env
+          echo "SEC_KEY=${{ secrets.SEC_KEY }}" >> .env
+
       - name: Start or Restart PM2 Process
         run: |
           # Check if the 'bs-backend' process is running
