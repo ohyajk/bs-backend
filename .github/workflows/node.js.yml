@@ -7,21 +7,36 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+
     strategy:
       matrix:
         node-version: [20.17.0]
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      SEC_KEY: ${{ secrets.SEC_KEY }}
-      SP_API_KEY: ${{ secrets.SP_API_KEY }}
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npx prisma db push
-    - run: pm2 restart 0
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Push Prisma Schema
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SP_API_KEY: ${{ secrets.SP_API_KEY }}
+          SEC_KEY: ${{ secrets.SEC_KEY }}
+        run: npx prisma db push
+
+      - name: Start or Restart PM2 Process
+        run: |
+          # Check if the 'bs-backend' process is running
+          if pm2 list | grep -q 'bs-backend'; then
+            echo "Restarting bs-backend..."
+            pm2 restart bs-backend
+          else
+            echo "Starting bs-backend..."
+            pm2 start npm --name bs-backend -- run start
+          fi
