@@ -6,16 +6,15 @@ on:
 
 jobs:
   build:
-
     runs-on: self-hosted
-
     strategy:
       matrix:
         node-version: [20.17.0]
     env:
-        DATABASE_URL: ${{secrets.DATABASE_URL}}
-        SEC_KEY: ${{secrets.SEC_KEY}}
-        SP_API_KEY: ${{secrets.SP_API_KEY}}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SEC_KEY: ${{ secrets.SEC_KEY }}
+      SP_API_KEY: ${{ secrets.SP_API_KEY }}
+
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
@@ -26,4 +25,3 @@ jobs:
     - run: npm ci
     - run: npx prisma db push
     - run: pm2 restart 0
-    
