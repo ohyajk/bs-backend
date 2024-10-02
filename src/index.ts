@@ -24,8 +24,8 @@ app.use(
     } as any)
 )
 
-app.get("/loaderio-c711c4a1035c18ccfd35f348cbba7d74/", (c) => {
-    return c.html("loaderio-c711c4a1035c18ccfd35f348cbba7d74")
+app.get("/loaderio-362c8c456aca1dfb5f427d6b80338ef1/", (c) => {
+    return c.html("loaderio-362c8c456aca1dfb5f427d6b80338ef1")
 })
 
 app.route("/bike", bikes)
