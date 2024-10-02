@@ -5,7 +5,19 @@ const bikes = new Hono()
 
 bikes.get("/all", async (c) => {
     try {
-        const bikeData = await prisma.bike.findMany()
+        const bikeData = await prisma.bike.findMany({
+            select: {
+              id: true,
+              name: true,
+              discount: true,
+              originalPrice: true,
+              price: true,
+              url: true,
+              rating: true,
+              image: true,
+              category: true,
+            },
+          })
         return c.json(bikeData)
     } catch (err) {
         return c.json({ error: "Failed to fetch bikes", err }, 500)
