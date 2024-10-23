@@ -1,0 +1,4 @@
+[phases]
+setup = "npm install"
+build = "npx prisma db push" 
+start = "npm run start"  
