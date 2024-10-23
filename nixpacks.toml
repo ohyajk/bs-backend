@@ -6,4 +6,4 @@
   cmds = ["npx prisma db push"]
 
   [phases.start]
-  cmds = ["node server.js"]  # Replace 'server.js' with your app's entry point
+  cmds = ["npm run start"]  
