@@ -1,4 +1,9 @@
 [phases]
-setup = "npm install"
-build = "npx prisma db push" 
-start = "npm run start"  
+  [phases.setup]
+  cmds = ["npm install"]
+
+  [phases.build]
+  cmds = ["npx prisma db push"]
+
+  [phases.start]
+  cmds = ["node server.js"]  # Replace 'server.js' with your app's entry point
