@@ -8,7 +8,7 @@ export const sendMail = async (email: string, otp: string) => {
         authMethod: "LOGIN",
         auth: {
             user: "SMTP_Injection", // Replace with your SMTP email
-            pass: Bun.env.SP_API_KEY, // Replace with your SMTP password
+            pass: process.env.SP_API_KEY, // Replace with your SMTP password
         },
     })
 
