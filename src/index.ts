@@ -33,7 +33,7 @@ app.route("/rando", rando)
 app.route("/order", order)
 
 const port: number = parseInt(process.env.PORT as string, 10) || 9001
-console.log(`Server is running on port ${port}`)
+console.log(`Server is running on port- ${port}`)
 
 serve({
     fetch: app.fetch,
