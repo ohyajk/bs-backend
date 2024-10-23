@@ -2,6 +2,7 @@
     "name": "bikestore-backend",
     "scripts": {
         "dev": "tsx watch src/index.ts",
+        "pp": "npx prisma db push",
         "start": "tsx src/index.ts"
     },
     "dependencies": {

@@ -1,9 +1,9 @@
 [phases]
   [phases.setup]
-  cmds = ["npm install"]
+  cmds = ["npm ci"]
 
   [phases.build]
-  cmds = ["npx prisma db push"]
+  cmds = ["npm run pp"]
 
   [phases.start]
   cmds = ["npm run start"]  
