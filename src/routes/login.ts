@@ -31,6 +31,7 @@ login.post("/", async (c) => {
         setCookie(c, "session", token, {
             httpOnly: false,
             sameSite: "Lax",
+            maxAge: 60 * 60 ,
         })
 
         const userData = {
