@@ -7,6 +7,7 @@ import user from "./routes/user"
 import rando from "./routes/rando"
 import { cors } from "hono/cors"
 import order from "./routes/order"
+import { access } from "fs"
 require('dotenv').config();
 
 const app = new Hono().basePath("/api")
@@ -18,11 +19,11 @@ app.get("/", (c) => {
 app.use(
     "*",
     cors({
-        origin: "*",
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        headers: ["Content-Type", "Authorization"],
-        credentials: true,
-    } as any)
+        origin: "https://bs-frontend-9v51.onrender.com",  // Set to frontend origin
+        allowMethods: ["GET", "POST", "PUT", "DELETE"],  // Allowed HTTP methods
+        allowHeaders: ["Content-Type", "Authorization"],  // Allowed headers in requests
+        credentials: true,  // Allow credentials (cookies, auth headers)
+    })
 )
 
 app.route("/bike", bikes)
