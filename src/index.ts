@@ -19,7 +19,7 @@ app.get("/", (c) => {
 app.use(
     "*",
     cors({
-        origin: "https://bs-frontend-9v51.onrender.com",  // Set to frontend origin
+        origin: ["https://bs-frontend-9v51.onrender.com", "https://bs.jkweb.in"],  // Set to frontend origin
         allowMethods: ["GET", "POST", "PUT", "DELETE"],  // Allowed HTTP methods
         allowHeaders: ["Content-Type", "Authorization"],  // Allowed headers in requests
         credentials: true,  // Allow credentials (cookies, auth headers)
