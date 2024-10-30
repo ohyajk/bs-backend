@@ -1,9 +1,0 @@
-[phases]
-  [phases.setup]
-  cmds = ["npm ci"]
-
-  [phases.build]
-  cmds = ["npm run pp"]
-
-  [phases.start]
-  cmds = ["npm run start"]  

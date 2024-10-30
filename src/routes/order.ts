@@ -5,7 +5,7 @@ import authorize, { CustomContext } from "../lib/authorize"
 const order = new Hono()
 // Add Order
 order.post("/", authorize, async (c: CustomContext) => {
-    const { bikeId } = await c.req.json()
+    const { bikeIds } = await c.req.json()
     const decodEmail = c.get("decodEmail")
 
     const userData = await prisma.user.findFirst({
@@ -17,15 +17,21 @@ order.post("/", authorize, async (c: CustomContext) => {
     }
 
     try {
+        const bikes = await prisma.bike.findMany({
+            where: { id: { in: bikeIds } }
+        })
+        const bikesTotal = bikes.reduce((acc, bike) => acc + bike.price, 0)
+        const totalWithTax = bikesTotal + (bikesTotal * 8 / 100) + 15
         const saveOrder = await prisma.order.create({
             data: {
                 userId: userData.id,
-                bikeId,
+                bikeIds,
+                total: totalWithTax,
                 deliveryStatus: "YET_TO_SHIP",
                 paymentStatus: "PENDING",
             },
         })
-        return c.json(saveOrder)
+        return c.json(saveOrder, 201)
     } catch (err) {
         return c.json({ error: "Failed to add order" }, 500)
     }
@@ -46,9 +52,8 @@ order.get("/all", authorize, async (c: CustomContext) => {
     try {
         const orders = await prisma.order.findMany({
             where: { userId: userData.id },
-            include: {
-                bike: true,
-            },
+            orderBy: { createdAt: "desc" },
+
         })
         return c.json(orders)
     } catch (err) {
@@ -71,10 +76,7 @@ order.get("/:id", authorize, async (c: CustomContext) => {
 
     try {
         const order = await prisma.order.findFirst({
-            where: { id, userId: userData.id },
-            include: {
-                bike: true,
-            },
+            where: { id, userId: userData.id }
         })
         return c.json(order)
     } catch (err) {

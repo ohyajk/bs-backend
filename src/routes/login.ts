@@ -30,7 +30,6 @@ login.post("/", async (c) => {
         const token = await sign({ email }, "secret")
         setCookie(c, "session", token, {
             httpOnly: false,
-            maxAge: 86400,
             sameSite: "Lax",
         })
 

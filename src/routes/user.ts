@@ -50,6 +50,21 @@ user.put("/update", authorize, async (c: CustomContext) => {
                 state,
                 locality,
             },
+            select: {
+                otp: false,
+                email: true,
+                id: true,
+                name: true,
+                phone: true,
+                city: true,
+                country: true,
+                zip: true,
+                state: true,
+                locality: true,
+                isOnboardingComplete: true,
+                createdAt: true,
+                updatedAt: true,
+            }
         })
 
         return c.json(updatedUser)
