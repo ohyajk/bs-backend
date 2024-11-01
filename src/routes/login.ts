@@ -22,10 +22,10 @@ login.post("/", async (c) => {
             return c.json({ error: "Invalid OTP!" }, 400)
         }
 
-        // await prisma.users.update({
-        //     where: { email },
-        //     data: { otp: "null" },
-        //   });
+        await prisma.user.update({
+            where: { email },
+            data: { otp: "null" },
+          });
 
         const token = await sign({ email }, "secret")
         setCookie(c, "session", token, {

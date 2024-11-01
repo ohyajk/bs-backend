@@ -35,7 +35,7 @@ user.get("/", authorize, async (c: CustomContext) => {
 
 user.put("/update", authorize, async (c: CustomContext) => {
     const decodEmail = c.get("decodEmail")
-    const { name, phone, city, country, zip, state, locality } =
+    const { name, phone, city, country, zip, state, locality, isOnboardingComplete } =
         await c.req.json()
 
     try {
@@ -49,6 +49,7 @@ user.put("/update", authorize, async (c: CustomContext) => {
                 zip,
                 state,
                 locality,
+                isOnboardingComplete
             },
             select: {
                 otp: false,

@@ -71,6 +71,7 @@ enum DeliveryStatus {
 enum PaymentStatus {
   PAID
   PENDING
+  REFUNDED
 }
 
 model Order {

@@ -9,6 +9,7 @@ import { cors } from "hono/cors"
 import order from "./routes/order"
 import { access } from "fs"
 import logout from "./routes/logout"
+import payment from "./routes/payment"
 require('dotenv').config();
 
 const app = new Hono().basePath("/api")
@@ -34,6 +35,7 @@ app.route("/logout", logout)
 app.route("/user", user)
 app.route("/rando", rando)
 app.route("/order", order)
+app.route("/payment", payment)
 
 const port: number = parseInt(process.env.PORT as string, 10) || 9001
 console.log(`Server is running on port- ${port}`)

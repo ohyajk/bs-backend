@@ -62,8 +62,8 @@ order.get("/all", authorize, async (c: CustomContext) => {
 })
 
 // Get by id
-order.get("/:id", authorize, async (c: CustomContext) => {
-    const { id } = c.req.param()
+order.get("/:ref", authorize, async (c: CustomContext) => {
+    const { ref } = c.req.param()
     const decodEmail = c.get("decodEmail")
 
     const userData = await prisma.user.findFirst({
@@ -76,9 +76,14 @@ order.get("/:id", authorize, async (c: CustomContext) => {
 
     try {
         const order = await prisma.order.findFirst({
-            where: { id, userId: userData.id }
+            where: { ref, userId: userData.id }
         })
-        return c.json(order)
+        if (order) {
+            const bikes = await prisma.bike.findMany({
+                where: { id: { in: order.bikeIds } },
+            });
+            return c.json({ ...order, bikes })
+        }
     } catch (err) {
         return c.json({ error: "Failed to fetch order" }, 500)
     }
