@@ -68,7 +68,7 @@ payment.post('/confirmHook', async (c) => {
         return c.json({ error: 'Webhook signature verification failed' }, 400);
     }
 
-    if (event.type === 'checkout.session.completed') {
+    if (event.type === 'checkout.session.async_payment_succeeded') {
         const session = event.data.object;
 
         if (!session.metadata) {
@@ -77,9 +77,19 @@ payment.post('/confirmHook', async (c) => {
         }
         const orderRef = session.metadata.ref;
 
+        const order = await prisma.order.findFirst({
+            where: { ref: orderRef },
+            select: { id: true },
+        });
+
+        if (!order) {
+            console.error(`Order with ref ${orderRef} not found`);
+            return c.json({ error: 'Order not found' }, 404);
+        }
+
         try {
             await prisma.order.update({
-                where: { id: orderRef },
+                where: { id: order.id },
                 data: { paymentStatus: 'PAID' },
             });
             console.log(`Order ${orderRef} payment status updated to "paid"`);
