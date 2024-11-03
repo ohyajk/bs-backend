@@ -69,7 +69,7 @@ payment.post('/confirmHook', async (c) => {
         return c.json({ error: 'Webhook signature verification failed' }, 400);
     }
 
-    if (event.type === 'checkout.session.async_payment_succeeded') {
+    if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
 
         if (!session.metadata) {
