@@ -8,10 +8,9 @@ const stripe = new Stripe(process.env.STRIPE_SEC_KEY as string);
 payment.post('/', async (c) => {
     const { ref } = await c.req.json();
 
-    // Fetch the order and related user
     const order = await prisma.order.findFirst({
         where: { ref },
-        include: { user: true }, // Assuming 'user' is a relation in your Prisma schema
+        include: { user: true }, 
     });
 
     if (!order) {
@@ -63,18 +62,15 @@ payment.post('/confirmHook', async (c) => {
     let event;
 
     try {
-        // Verify Stripe webhook signature
         event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_HOOK_SEC as string);
     } catch (err : any) {
         console.error(`Webhook signature verification failed: ${err.message}`);
         return c.json({ error: 'Webhook signature verification failed' }, 400);
     }
 
-    // Handle specific event types
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
 
-        // Get the order reference from metadata
         if (!session.metadata) {
             console.error('Missing metadata in session');
             return c.json({ error: 'Missing metadata in session' }, 400);
@@ -82,7 +78,6 @@ payment.post('/confirmHook', async (c) => {
         const orderRef = session.metadata.ref;
 
         try {
-            // Update the payment status of the order in your database
             await prisma.order.update({
                 where: { id: orderRef },
                 data: { paymentStatus: 'PAID' },
@@ -94,7 +89,6 @@ payment.post('/confirmHook', async (c) => {
         }
     }
 
-    // Return a 200 response to Stripe to acknowledge receipt of the event
     return c.json({ received: true }, 200);
 });
 
