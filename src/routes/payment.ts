@@ -51,6 +51,7 @@ payment.post('/', async (c) => {
 });
 
 payment.post('/confirmHook', async (c) => {
+    console.log('Received Stripe webhook');
     const sig = c.req.header('stripe-signature');
     const body = await c.req.text();
 
